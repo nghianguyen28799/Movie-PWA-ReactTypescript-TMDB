@@ -23,7 +23,7 @@ const tmdbApi = {
   },
 
   search: (request: ICategoryRequest) => {
-    const url = "search/" + request.category;
+    const url = "search/" + request.category + "?api_key=" + apiConfig.API_KEY + "&language=en-US&page=" + request.page + "&include_adult=false";
     return axiosClient.get(url);
   },
 

@@ -1,0 +1,24 @@
+@use "../../scss/" as *;
+
+.movie-cart-box {
+    margin-bottom: 3rem;
+}
+
+.category {
+  padding-top: 120px;
+
+  &__header {
+    // @include flex(center, space-between);
+    padding-bottom: 2rem;
+  }
+
+  &__movies-list {
+    width: 100%;
+    @include flex(center, space-between);
+    flex-wrap: wrap;
+  }
+  
+  &__load-more {
+      @include flex(center, center)
+  }
+}

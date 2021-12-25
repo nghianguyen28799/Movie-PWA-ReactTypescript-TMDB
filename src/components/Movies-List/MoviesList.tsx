@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import tmdbApi from "../../api/tmdbApi";
 import { IVideo } from "../../interfaces/Movies";
 import MovieCard from "../MovieCard/MovieCard";
+import { skeletonData } from "../../common/skeletonData";
 
 interface IMoviesList {
   category: string;
@@ -13,6 +14,7 @@ interface IMoviesList {
 
 const MoviesList = (props: IMoviesList) => {
   const [items, setItems] = React.useState<IVideo[]>([]);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
     const getList = async () => {
@@ -31,17 +33,24 @@ const MoviesList = (props: IMoviesList) => {
       setItems(response?.data.results);
     };
     getList();
+    setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="movies-list">
       <Swiper grabCursor={true} spaceBetween={15} slidesPerView={"auto"}>
-        {items.map((item, index) => (
-          <SwiperSlide key={index}>
-            <MovieCard item={item} category={props.category} />
-          </SwiperSlide>
-        ))}
+        {!loading
+          ? items.map((item, index) => (
+              <SwiperSlide key={index}>
+                <MovieCard item={item} category={props.category} />
+              </SwiperSlide>
+            ))
+          : skeletonData.map((item, index) => (
+              <SwiperSlide key={index}>
+                <MovieCard item={item} category={props.category} loading={true} />
+              </SwiperSlide>
+            ))}
       </Swiper>
     </div>
   );

@@ -26,8 +26,10 @@ export interface IVideo {
   adult: boolean;
   overview: string;
   release_data: string;
-  genre_ids: [number];
+  genre_ids: any;
+  original_title: string;
   id: number;
+  release_date: string;
   original_language: string;
   title: string;
   backdrop_path: string | null;
@@ -39,4 +41,12 @@ export interface IVideo {
   origin_country: [string];
   original_name: string;
   vote_average: number;
+}
+
+export interface IVideoTemp {
+  id: number;
+  poster_path: string | null;
+  title?: string;
+  backdrop_path: string | null;
+  name?: string;
 }

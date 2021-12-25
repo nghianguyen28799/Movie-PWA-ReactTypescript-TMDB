@@ -21,11 +21,11 @@ const routes: IRoutes[] = [
   },
   {
     label: "Movies",
-    url: "/movies",
+    url: "/library/movies",
   },
   {
     label: "TV Series",
-    url: "/tv-series",
+    url: "/library/tv-series",
   },
 ];
 
@@ -33,7 +33,7 @@ const Header = () => {
   const { pathname } = useLocation();
   const history = useHistory();
 
-  const tabletScreen = useMediaQuery("(min-width:1025px)");
+  const tabletScreen = useMediaQuery("(min-width:1024px)");
   const mobileScreen = useMediaQuery("(min-width:600px)");
 
   const headerRef = React.useRef<any>(null);
@@ -42,7 +42,7 @@ const Header = () => {
 
   React.useEffect(() => {
     const shrinkHeader = () => {
-      if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+      if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
         headerRef.current.classList.add("shrink");
       } else {
         headerRef.current.classList.remove("shrink");

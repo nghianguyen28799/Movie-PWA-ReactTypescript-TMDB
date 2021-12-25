@@ -13,6 +13,7 @@ import "./HeroSlide.scss";
 import ModalTrailer from "../Modal/Modal";
 import CloseIcon from "@mui/icons-material/Close";
 import { buttonTheme } from "../../common/buttotTheme";
+import { useHistory } from "react-router-dom";
 
 interface IHeoroSlideItem {
   item: IPopularMovieResults;
@@ -111,10 +112,16 @@ const HeroSlide = () => {
 };
 
 const HeroSlideItem = (props: IHeoroSlideItem) => {
+  const history = useHistory();
+
   const { item, status } = props;
 
   const mobileScreen = useMediaQuery("(min-width:600px)");
   const background = apiConfig.originalImage(item.poster_path);
+
+  const onWatchNow = () => {
+    history.push(`/playvideo/movie/${item.id}`);
+  };
 
   return (
     <div className={`hero-slide__item ${status}`} style={{ backgroundImage: `url(${background})` }}>
@@ -134,6 +141,7 @@ const HeroSlideItem = (props: IHeoroSlideItem) => {
               size={!mobileScreen ? "medium" : "large"}
               variant="contained"
               sx={{ fontWeight: 600, color: colors.txtColor, textTransform: "initial" }}
+              onClick={onWatchNow}
             >
               Watch now
             </Button>
