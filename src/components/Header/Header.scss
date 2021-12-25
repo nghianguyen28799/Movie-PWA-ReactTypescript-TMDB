@@ -1,0 +1,143 @@
+@use "../../scss/" as *;
+
+.header-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 99;
+  height: 80px;
+  transition: height 0.3s ease, background-color 0.3s ease;
+  @include overlay();
+}
+
+.header-box::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, $main-color 0%, #9e9e9e50 50%);
+}
+
+.shrink {
+  height: 60px !important;
+  background-color: $body-bg !important;
+}
+
+.header {
+  height: 100%;
+
+  @include flex(center, space-between);
+
+  &__logo > h1 {
+    font-size: 1.8rem;
+    color: $main-color;
+  }
+
+  &__routes {
+    height: 100%;
+    @include flex(center, center);
+
+    &__link {
+      height: 100%;
+      @include flex(center, center);
+      position: relative;
+      padding: 0 0.5rem;
+
+      a {
+        font-weight: 500;
+      }
+
+      a::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        left: 50%;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        transition: 0.5s ease width;
+        transform: translateX(-50%);
+        border-bottom: 2px solid $main-color;
+      }
+
+      a:hover::after,
+      .active::after {
+        width: 100%;
+      }
+
+      .active {
+        color: $main-color;
+      }
+    }
+
+    & > * ~ * {
+      margin-left: 3rem;
+    }
+  }
+
+  &__search {
+    background: #9e9e9e50;
+    border-radius: 50%;
+  }
+
+  @include tablet {
+    padding: 0 2rem;
+  }
+}
+
+.search {
+  position: absolute;
+  background-color: $body-bg;
+  width: 0;
+  height: 100%;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  transition: .3s ease width;
+  // transform: translateX(-50%);
+  @include flex(center, center);
+  visibility: hidden;  
+}
+
+.search--open {
+  width: 100%;
+  padding: 0 20px;
+  &__textfield {
+    position: relative;
+    width: 100%;
+    background: $body-bg;
+    border: 2px solid $main-color;
+    color: $txt-color;
+    font-size: 1rem;
+    padding: 12px 30px;
+    border-radius: $border-radius;
+
+    &__close {
+      position: absolute;
+      right: 35px;
+      cursor: pointer;
+    }
+  }
+  visibility: visible;
+}
+
+.drawer-box {
+  width: 500px;
+
+  @include mobile {
+    width: 250px;
+  }
+
+  &__logo > h1 {
+    height: 80px;
+    @include flex(center, center);
+    font-size: 3rem;
+    color: $main-color;
+    @include mobile {
+      font-size: 1.8rem;
+    }
+  }
+}

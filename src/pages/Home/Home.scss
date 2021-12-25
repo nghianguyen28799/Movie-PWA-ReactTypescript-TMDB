@@ -1,0 +1,7 @@
+@use "../../scss/" as *;
+
+.category-box {
+    @include tablet {
+        margin-top: -3rem;
+    }
+}

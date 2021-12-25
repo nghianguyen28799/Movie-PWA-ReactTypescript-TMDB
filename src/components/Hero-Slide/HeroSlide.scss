@@ -1,0 +1,215 @@
+@use "../../scss/" as *;
+
+.hero-slide {
+  margin-bottom: 3rem;
+}
+
+.hero-slide__item {
+  padding: 9rem;
+  width: 100%;
+  position: relative;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+
+  @include tablet {
+    padding: 9rem 5rem;
+  }
+
+  @include mobile {
+    padding: 11rem 3rem 6rem 3rem;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    @include overlay();
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background-image: linear-gradient(to top, $body-bg, rgba($black, 0));
+  }
+
+  &__content {
+    &__info {
+      width: 60%;
+      padding: 2rem 3rem 2rem 0;
+      position: relative;
+
+      .title > h1 {
+        font-size: 3.5rem;
+        line-height: 4rem;
+        font-size: 4rem;
+        font-weight: 700;
+
+        @include tablet {
+          font-size: 3rem;
+        }
+
+        @include mobile {
+          font-size: 2rem;
+          line-height: 2.5rem;
+        }
+      }
+
+      .user-core {
+        margin-top: 2rem;
+        height: 50px;
+        @include flex(center, flex-start);
+
+        &__progress {
+          width: 60px;
+          height: 60px;
+          font-weight: 700;
+        }
+
+        & > h2 {
+          margin-left: 1rem;
+        }
+
+        .CircularProgressbar-text {
+          font-size: 2rem !important;
+        }
+
+        @include mobile {
+          margin-top: 0.8rem;
+          &__progress {
+            width: 30px;
+            height: 30px;
+            font-weight: 700;
+          }
+
+          & > h2 {
+            margin-left: 0.5rem;
+            font-size: 1.2rem;
+          }
+
+          .CircularProgressbar-text {
+            font-size: 2.8rem !important;
+          }
+        }
+      }
+
+      .button {
+        margin-top: 2rem;
+      }
+
+      .description {
+        margin-top: 2rem;
+        font-weight: 600;
+      }
+
+      .title,
+      .user-core,
+      .button,
+      .description {
+        opacity: 0;
+        transform: translateY(-100px);
+        transition: 0.5s ease opacity, 0.5s ease transform;
+      }
+
+      @include mobile {
+        padding-right: 0.5rem;
+
+        .user-core,
+        .button {
+          margin-top: 0rem;
+        }
+        .description {
+          margin-top: 1rem;
+          font-size: 8px;
+        }
+      }
+      @include tablet {
+        font-size: 14px;
+      }
+    }
+
+    &__poster {
+      width: 40%;
+      @include flex(center, flex-end);
+      position: relative;
+
+      & > img {
+        transform: scale(0);
+        transition: 0.5s ease transform;
+        border-radius: $border-radius;
+      }
+    }
+  }
+}
+
+.active > .hero-slide__item__content__poster > img {
+  transform: scale(1);
+}
+
+.active > .hero-slide__item__content__info {
+  .title,
+  .user-core,
+  .button,
+  .description {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .title {
+    transition-delay: 0.3s;
+  }
+
+  .user-core {
+    transition-delay: 0.6s;
+  }
+
+  .button {
+    transition-delay: 0.9s;
+  }
+
+  .description {
+    transition-delay: 1.2s;
+  }
+}
+
+.modal-box {
+  position: relative;
+  background-color: $body-bg;
+  padding: 2rem;
+  width: 800px;
+
+  @include tablet {
+    width: 650px;
+  }
+
+  @include mobile {
+    width: 300px;
+  }
+
+  .modal-close {
+    cursor: pointer;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+  }
+
+  .modal-video {
+    height: 500px;
+
+    @include tablet {
+      height: 450px;
+    }
+
+    @include mobile {
+      height: 250px;
+    }
+  }
+}

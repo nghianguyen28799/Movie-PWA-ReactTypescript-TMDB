@@ -1,0 +1,95 @@
+@use "../../scss/" as *;
+
+$width-laptop: 250px;
+$width-tablet: 200px;
+$width-mobile: 80px;
+
+$height-laptop: 360px;
+$height-tablet: 280px;
+$height-mobile: 120px;
+
+.movie-card {
+  width: $width-laptop;
+  overflow: hidden;
+  position: relative;
+  border-radius: 10px;
+
+  @include tablet {
+    width: $width-tablet;
+  }
+
+  @include mobile {
+    width: $width-mobile;
+  }
+
+  &__image {
+    height: $height-laptop;
+    width: $width-laptop;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    transition: 0.5s ease all;
+    @include tablet {
+      height: $height-tablet;
+      width: $width-tablet;
+    }
+
+    @include mobile {
+      height: $height-mobile;
+      width: $width-mobile;
+    }
+  }
+
+  &__image::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: $black;
+    opacity: 0;
+    transition: 0.3s ease all;
+  }
+
+  &__title {
+    width: $width-laptop;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include tablet {
+      width: $width-tablet;
+    }
+
+    @include mobile {
+      width: $width-mobile;
+    }
+    margin-top: 0.6rem;
+  }
+}
+
+.movie-card > img {
+  position: absolute;
+  z-index: 99;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: 0.5s ease width;
+  width: 0;
+}
+
+.movie-card:hover {
+  .movie-card__image {
+    transform: scale(1.8);
+  }
+  .movie-card__image::before {
+    opacity: 0.8;
+  }
+  img {
+    width: 70px;
+
+    @include mobile {
+      width: 35px;
+    }
+  }
+}
