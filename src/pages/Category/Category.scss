@@ -22,3 +22,9 @@
       @include flex(center, center)
   }
 }
+
+.not-found {
+  @include flex(flex-start, center);
+  margin-top: 2rem;
+  height: 60vh;
+}

@@ -19,7 +19,7 @@ const MoviesList = (props: IMoviesList) => {
   React.useEffect(() => {
     const getList = async () => {
       let response = null;
-      if (props.category !== "similar") {
+      if (props.type !== "similar") {
         switch (props.category) {
           case "movie":
             response = await tmdbApi.getMoviesList({ type: props.type, page: 1 });
@@ -28,8 +28,10 @@ const MoviesList = (props: IMoviesList) => {
             response = await tmdbApi.getTvList({ type: props.type, page: 1 });
         }
       } else {
-        response = await tmdbApi.similar({ category: "similar", id: props.id, page: 1 });
+        response = await tmdbApi.similar({ category: props.category, id: props.id, page: 1 });
       }
+      console.log(response)
+
       setItems(response?.data.results);
     };
     getList();

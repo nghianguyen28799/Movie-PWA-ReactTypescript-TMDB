@@ -37,7 +37,6 @@ const HeroSlide = () => {
       try {
         const response = await tmdbApi.getMoviesList(request);
         setMovieItems(response.data.results.slice(0, 4));
-        console.log(response);
       } catch (err) {
         console.log(err);
       }
@@ -117,6 +116,8 @@ const HeroSlideItem = (props: IHeoroSlideItem) => {
   const { item, status } = props;
 
   const mobileScreen = useMediaQuery("(min-width:600px)");
+  const tabletScreen = useMediaQuery("(min-width:1024px)");
+
   const background = apiConfig.originalImage(item.poster_path);
 
   const onWatchNow = () => {
@@ -140,7 +141,12 @@ const HeroSlideItem = (props: IHeoroSlideItem) => {
             <Button
               size={!mobileScreen ? "medium" : "large"}
               variant="contained"
-              sx={{ fontWeight: 600, color: colors.txtColor, textTransform: "initial" }}
+              sx={{
+                fontWeight: 600,
+                color: colors.txtColor,
+                textTransform: "initial",
+                fontSize: tabletScreen && mobileScreen ? "1.5rem" : "auto",
+              }}
               onClick={onWatchNow}
             >
               Watch now
@@ -152,6 +158,7 @@ const HeroSlideItem = (props: IHeoroSlideItem) => {
                 fontWeight: 600,
                 marginLeft: !mobileScreen ? "8px" : 2,
                 textTransform: "initial",
+                fontSize: tabletScreen && mobileScreen ? "1.5rem" : "auto",
               }}
               onClick={() => props.handleOpenTrailer(item.id)}
             >

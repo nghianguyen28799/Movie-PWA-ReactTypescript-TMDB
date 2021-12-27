@@ -23,13 +23,13 @@ const tmdbApi = {
   },
 
   search: (request: ICategoryRequest) => {
-    const url = "search/" + request.category + "?api_key=" + apiConfig.API_KEY + "&language=en-US&page=" + request.page + "&include_adult=false";
+    const url = "search/" + request.category + "?api_key=" + apiConfig.API_KEY + "&language=en-US&query=" + request.query + "&page=" + request.page + "&include_adult=false";
     return axiosClient.get(url);
   },
 
   credits: (request: ICategoryRequest) => {
     try {
-      const url = request.category + "/" + request.id + "/credits";
+      const url = request.category + "/" + request.id + "/credits?api_key=" + apiConfig.API_KEY + "&language=en-US";
       return axiosClient.get(url);
     } catch (error) {
       console.log(error);
@@ -44,6 +44,15 @@ const tmdbApi = {
       console.log(error);
     }
   },
+
+  detail: (request: ICategoryRequest) => {
+    try {
+      const url = request.category + "/" + request.id + "?api_key=" + apiConfig.API_KEY + "&language=en-US"; 
+      return axiosClient.get(url);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };
 
 export default tmdbApi;

@@ -12,5 +12,5 @@ export interface IMovieRequest {
       category: "movie" | "tv" | string;
       id?: number | string;
       page?: number;
+      query?: string;
   }
-  

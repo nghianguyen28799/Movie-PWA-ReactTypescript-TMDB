@@ -1,0 +1,28 @@
+@use "../../scss/" as *;
+
+.footer {
+  width: 100%;
+  margin-top: 3rem;
+
+  &__img {
+    position: relative;
+    padding: 6rem 2rem;
+    background-position: top;
+    background-size: cover;
+    background-repeat: no-repeat;
+  
+    @include mobile {
+        padding: 4rem 2rem;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      @include overlay();
+    }
+  }
+}

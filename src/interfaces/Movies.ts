@@ -41,6 +41,13 @@ export interface IVideo {
   origin_country: [string];
   original_name: string;
   vote_average: number;
+  genres: IGenres[];
+  runtime: number | string;
+  production_countries: any;
+  episode_run_time: any;
+  last_episode_to_air: IEpisode;
+  number_of_seasons: number;
+  seasons: ISeason[];
 }
 
 export interface IVideoTemp {
@@ -49,4 +56,32 @@ export interface IVideoTemp {
   title?: string;
   backdrop_path: string | null;
   name?: string;
+}
+
+interface IGenres {
+  id: number;
+  name: string;
+}
+
+interface IEpisode {
+  air_date: string;
+  episode_number: number;
+  id: number;
+  name: string;
+  overview: string;
+  production_code: string;
+  season_number: number;
+  still_path: string;
+  vote_average: number;
+  vote_count: number;
+}
+
+interface ISeason {
+  air_date: string;
+  episode_count: number;
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string;
+  season_number: number;
 }
