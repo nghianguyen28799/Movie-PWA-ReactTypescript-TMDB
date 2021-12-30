@@ -1,7 +1,7 @@
 @use "../../scss/" as *;
 
 .movie-cart-box {
-    margin-bottom: 3rem;
+  margin-bottom: 3rem;
 }
 
 .category {
@@ -14,12 +14,29 @@
 
   &__movies-list {
     width: 100%;
-    @include flex(center, space-between);
-    flex-wrap: wrap;
+    // @include flex(center, space-between);
+    // flex-wrap: wrap;
+
+    // &::after {
+    //   content: "";
+    //   flex: auto;
+    // }
+    display: grid;
+    grid-template-columns: repeat(auto-fill, $width-laptop);
+    grid-gap: 1rem;
+    justify-content: space-between;
+
+    @include tablet {
+      grid-template-columns: repeat(auto-fill, $width-tablet);
+    }
+
+    @include mobile {
+      grid-template-columns: repeat(auto-fill, $width-mobile);
+    }
   }
-  
+
   &__load-more {
-      @include flex(center, center)
+    @include flex(center, center);
   }
 }
 

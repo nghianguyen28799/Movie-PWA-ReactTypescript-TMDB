@@ -1,4 +1,4 @@
-import { ICategoryRequest, IMovieRequest, ITvRequest } from "../interfaces/tmdbInterface";
+import { ICategoryRequest, IDetailEpisode, IMovieRequest, IMutiSearch, ITvRequest } from "../interfaces/tmdbInterface";
 import apiConfig from "./apiConfig";
 import axiosClient from "./axiosClient";
 
@@ -27,6 +27,11 @@ const tmdbApi = {
     return axiosClient.get(url);
   },
 
+  multiple_search: (request: IMutiSearch) => {
+    const url = "search/multi?api_key=" + apiConfig.API_KEY + "&language=en-US&query=" + request.query + "&page=" + request.page + "&include_adult=false";
+    return axiosClient.get(url);
+  },
+
   credits: (request: ICategoryRequest) => {
     try {
       const url = request.category + "/" + request.id + "/credits?api_key=" + apiConfig.API_KEY + "&language=en-US";
@@ -48,6 +53,15 @@ const tmdbApi = {
   detail: (request: ICategoryRequest) => {
     try {
       const url = request.category + "/" + request.id + "?api_key=" + apiConfig.API_KEY + "&language=en-US"; 
+      return axiosClient.get(url);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  detail_episode: (request: IDetailEpisode) => {
+    try {
+      const url = "tv/" + request.tv_id + "/season/" + request.season_number + "/episode/" + request.episode_number + "?api_key=" + apiConfig.API_KEY + "&language=en-US";
       return axiosClient.get(url);
     } catch (error) {
       console.log(error);

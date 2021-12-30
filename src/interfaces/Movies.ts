@@ -22,6 +22,7 @@ export interface IPopularMovieResults {
 }
 
 export interface IVideo {
+  media_type: string;
   poster_path: string | null;
   adult: boolean;
   overview: string;
@@ -56,6 +57,8 @@ export interface IVideoTemp {
   title?: string;
   backdrop_path: string | null;
   name?: string;
+  release_date?: string;
+  first_air_date?: string;
 }
 
 interface IGenres {

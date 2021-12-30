@@ -8,6 +8,7 @@ import { colors } from "../../common/colors";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import DrawerComponent from "../Drawer/Drawer";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 interface IRoutes {
   label: string;
@@ -29,6 +30,10 @@ const routes: IRoutes[] = [
   },
 ];
 
+type Inputs = {
+  search: string;
+};
+
 const Header = () => {
   const { pathname } = useLocation();
   const history = useHistory();
@@ -39,6 +44,8 @@ const Header = () => {
   const headerRef = React.useRef<any>(null);
   const [isSearching, setSearching] = React.useState<boolean>(false);
   const [isOpeningMenu, setOpeningMenu] = React.useState<boolean>(false);
+
+  const { register, handleSubmit } = useForm<Inputs>();
 
   React.useEffect(() => {
     const shrinkHeader = () => {
@@ -71,6 +78,12 @@ const Header = () => {
     editOpenMenu(false);
   };
 
+  const onSubmitSearch: SubmitHandler<Inputs> = (data) => {
+    if (data.search) {
+      history.push(`/search/query=${data.search}`);
+    }
+  };
+
   return (
     <React.Fragment>
       <div className="header-box" ref={headerRef}>
@@ -89,7 +102,9 @@ const Header = () => {
           ) : null}
 
           <div className="header__logo">
-            <h1>MovieNgN</h1>
+            <Link to="/home">
+              <h1 style={{ color: colors.mainColor }}>MovieNgN</h1>
+            </Link>
           </div>
 
           {/* Hidden Routes for tablet, mobile */}
@@ -118,14 +133,21 @@ const Header = () => {
             </IconButton>
           </div>
         </div>
-        <div className={isSearching ? "container search search--open" : "container search"}>
-          <input type="text" className="search--open__textfield" placeholder="Search here ..." />
-          <CloseOutlinedIcon
-            color="inherit"
-            className="search--open__textfield__close"
-            onClick={editSearchStatus}
-          />
-        </div>
+        <form onSubmit={handleSubmit(onSubmitSearch)}>
+          <div className={isSearching ? "container search search--open" : "container search"}>
+            <input
+              type="text"
+              {...register("search")}
+              className="search--open__textfield"
+              placeholder="Search here ..."
+            />
+            <CloseOutlinedIcon
+              color="inherit"
+              className="search--open__textfield__close"
+              onClick={editSearchStatus}
+            />
+          </div>
+        </form>
       </div>
       {!tabletScreen ? (
         <DrawerComponent open={isOpeningMenu} toggle={() => editOpenMenu(false)}>

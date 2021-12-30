@@ -30,7 +30,6 @@ const MoviesList = (props: IMoviesList) => {
       } else {
         response = await tmdbApi.similar({ category: props.category, id: props.id, page: 1 });
       }
-      console.log(response)
 
       setItems(response?.data.results);
     };

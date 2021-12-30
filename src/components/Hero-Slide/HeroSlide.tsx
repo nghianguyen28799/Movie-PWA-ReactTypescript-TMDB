@@ -26,6 +26,7 @@ SwiperCore.use([Navigation, Autoplay]);
 const HeroSlide = () => {
   const [movieItems, setMovieItems] = React.useState<IPopularMovieResults[]>([]);
   const [openTrailer, setOpenTrailer] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(true);
   const iframeRef = React.useRef<any>(null);
 
   React.useEffect(() => {
@@ -37,6 +38,7 @@ const HeroSlide = () => {
       try {
         const response = await tmdbApi.getMoviesList(request);
         setMovieItems(response.data.results.slice(0, 4));
+        setLoading(false);
       } catch (err) {
         console.log(err);
       }
@@ -70,25 +72,29 @@ const HeroSlide = () => {
   return (
     <React.Fragment>
       <div className="hero-slide">
-        <Swiper
-          grabCursor={true}
-          spaceBetween={0}
-          slidesPerView={1}
-          navigation
-          autoplay={{ delay: 4000 }}
-        >
-          {movieItems.map((item, index) => (
-            <SwiperSlide key={index}>
-              {({ isActive }) => (
-                <HeroSlideItem
-                  item={item}
-                  status={`${isActive ? "active" : ""}`}
-                  handleOpenTrailer={handleOpen}
-                />
-              )}
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        {!loading ? (
+          <Swiper
+            grabCursor={true}
+            spaceBetween={0}
+            slidesPerView={1}
+            navigation
+            autoplay={{ delay: 4000 }}
+          >
+            {movieItems.map((item, index) => (
+              <SwiperSlide key={index}>
+                {({ isActive }) => (
+                  <HeroSlideItem
+                    item={item}
+                    status={`${isActive ? "active" : ""}`}
+                    handleOpenTrailer={handleOpen}
+                  />
+                )}
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <div style={{ height: 1000 }} />
+        )}
       </div>
       <ModalTrailer open={openTrailer}>
         <div className="modal-box" id={`modal-box`}>

@@ -52,6 +52,13 @@ const MovieCard = (props: IMovieCard) => {
           <div className="movie-card">
             <div className="movie-card__image" style={{ backgroundImage: `url(${bg})` }}></div>
             <img src={PlayIcon} alt="" />
+            <div className="movie-card__release">
+              <p>
+                {category === "movie"
+                  ? item?.release_date?.split("-")[0]
+                  : item?.first_air_date?.split("-")[0]}
+              </p>
+            </div>
           </div>
           <div className="movie-card__title">
             <h5>{item.title ?? item.name}</h5>
@@ -65,7 +72,12 @@ const MovieCard = (props: IMovieCard) => {
             height={height}
             sx={{ borderRadius: "10px" }}
           />
-          <Skeleton variant="rectangular" width={width} height={24} sx={{ marginTop: "0.6rem" }} />
+          <Skeleton
+            variant="rectangular"
+            width={width}
+            height={mobileScreen ? 24 : 12}
+            sx={{ marginTop: "0.6rem", borderRadius: 1 }}
+          />
         </React.Fragment>
       )}
     </React.Fragment>

@@ -14,3 +14,14 @@ export interface IMovieRequest {
       page?: number;
       query?: string;
   }
+
+  export interface IDetailEpisode {
+    tv_id: number;
+    season_number: number;
+    episode_number: number;
+  }
+
+  export interface IMutiSearch {
+    page: number;
+    query: string;
+  }

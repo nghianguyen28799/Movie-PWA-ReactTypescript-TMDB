@@ -4,9 +4,11 @@ import "./Footer.scss";
 
 const Footer = () => {
   return (
-    <div className="footer">
-      <div className="footer__img" style={{backgroundImage: `url(${Wallpaper})`}}></div>
-    </div>
+    <React.Fragment>
+      <div className="footer">
+        <div className="footer__img" style={{ backgroundImage: `url(${Wallpaper})` }}></div>
+      </div>
+    </React.Fragment>
   );
 };
 

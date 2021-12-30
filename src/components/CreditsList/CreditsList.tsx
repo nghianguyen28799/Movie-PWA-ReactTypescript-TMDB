@@ -12,6 +12,7 @@ const CreditsList = (props: { category: string; id: number | string }) => {
       setCasts(response?.data.cast.slice(0, 10));
     };
     getData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

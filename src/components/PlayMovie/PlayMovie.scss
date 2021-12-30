@@ -7,7 +7,6 @@
   background-size: cover;
   background-repeat: no-repeat;
 
-  
   &::before {
     content: "";
     position: absolute;
@@ -35,12 +34,7 @@
   max-width: 1260px;
   position: relative;
 
-  @include tablet {
-    height: 50vh;
-  }
-
   @include mobile {
-    height: 50vh;
     margin-top: 0;
   }
 
@@ -55,10 +49,10 @@
       padding-top: 150%;
 
       @include tablet {
-        padding-top: 180%
+        padding-top: 180%;
       }
     }
-    
+
     @include mobile {
       display: none;
     }
@@ -95,20 +89,25 @@
       }
     }
 
-    &__description, &__casts, &__duration, &__country, &__core {
-      margin-top: 1.5rem;
+    &__description,
+    &__casts,
+    &__duration,
+    &__country,
+    &__core,
+    &__release {
+      margin-top: 1rem;
     }
   }
 }
 
 .video-box {
-    width: 100%;
-    height: 80vh;
-    position: relative;
-    margin-top: 50px; 
+  width: 100%;
+  height: 80vh;
+  position: relative;
+  margin-top: 50px;
 
-    @include mobile {
-      margin-top: -35vh;
-      height: 30vh;
-    }
+  @include mobile {
+    margin-top: -35vh;
+    height: 30vh;
+  }
 }

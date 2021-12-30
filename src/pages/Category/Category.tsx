@@ -1,6 +1,6 @@
 import React from "react";
 import "./Category.scss";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { IVideo } from "../../interfaces/Movies";
 import tmdbApi from "../../api/tmdbApi";
 import MovieCard from "../../components/MovieCard/MovieCard";
@@ -26,6 +26,7 @@ function useDebounce<T>(initialValue: T, time: number): [T, T, React.Dispatch<T>
 }
 
 const Category = () => {
+  const history = useHistory();
   const params: { category: string } = useParams();
   const title = params.category === "movies" ? "Movies" : "TV Series";
   const category = params.category === "movies" ? "movie" : "tv";
@@ -37,6 +38,10 @@ const Category = () => {
   const [loading, setLoading] = React.useState<boolean>(true);
 
   const getInitData = async () => {
+    if(params.category !== "movies" && params.category !== "tv-series") {
+      history.push("/not-found")
+    }
+  
     setLoading(true);
     setPage(1);
     let response = null;
@@ -147,7 +152,7 @@ const Category = () => {
               : null}
           </div>
           <div className="category__load-more">
-            {!loading ? (
+            {!loading && totalItems !== page ? (
               <ThemeProvider theme={buttonTheme}>
                 <Button
                   variant="outlined"
