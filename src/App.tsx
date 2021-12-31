@@ -10,11 +10,14 @@ import Header from "./components/Header/Header";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 function App() {
+
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
     },
   });
+
+
   return (
     <ThemeProvider theme={darkTheme}>
       <BrowserRouter>

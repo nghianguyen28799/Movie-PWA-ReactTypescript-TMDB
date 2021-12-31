@@ -15,6 +15,7 @@ const Home = () => {
 
   return (
     <React.Fragment>
+      <title>Home</title>
       <HeroSlide />
       <div className="category-box container">
         <div className="section mb-3">

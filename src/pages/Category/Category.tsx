@@ -38,10 +38,10 @@ const Category = () => {
   const [loading, setLoading] = React.useState<boolean>(true);
 
   const getInitData = async () => {
-    if(params.category !== "movies" && params.category !== "tv-series") {
-      history.push("/not-found")
+    if (params.category !== "movies" && params.category !== "tv-series") {
+      history.push("/not-found");
     }
-  
+
     setLoading(true);
     setPage(1);
     let response = null;
@@ -105,73 +105,77 @@ const Category = () => {
   };
 
   return (
-    <div className="container category">
-      <div className="category__header">
-        <Grid container>
-          <Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
-            <h2>{title}</h2>
+    <React.Fragment>
+      <title>{title}</title>
+
+      <div className="container category">
+        <div className="category__header">
+          <Grid container>
+            <Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
+              <h2>{title}</h2>
+            </Grid>
+            <Grid
+              item
+              xs={6}
+              sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}
+            >
+              <TextField
+                color="primary"
+                size="small"
+                name="search"
+                value={keyword}
+                onChange={handleOnChangeSearch}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
           </Grid>
-          <Grid
-            item
-            xs={6}
-            sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}
-          >
-            <TextField
-              color="primary"
-              size="small"
-              name="search"
-              value={keyword}
-              onChange={handleOnChangeSearch}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
-        </Grid>
-      </div>
-      {data.length || !keyword || loading ? (
-        <React.Fragment>
-          <div className="category__movies-list">
-            {!loading
-              ? data.map((item, index) => (
-                  <div className="movie-cart-box" key={index}>
-                    <MovieCard item={item} category={category} />
-                  </div>
-                ))
-              : null}
-            {loading
-              ? skeletonData.map((item, index) => (
-                  <div className="movie-cart-box" key={index}>
-                    <MovieCard item={item} category={category} loading={true} />
-                  </div>
-                ))
-              : null}
-          </div>
-          <div className="category__load-more">
-            {!loading && totalItems !== page ? (
-              <ThemeProvider theme={buttonTheme}>
-                <Button
-                  variant="outlined"
-                  size="large"
-                  sx={{ fontWeight: 600, textTransform: "initial" }}
-                  onClick={onLoadMore}
-                >
-                  Load more
-                </Button>
-              </ThemeProvider>
-            ) : null}
-          </div>
-        </React.Fragment>
-      ) : (
-        <div className="not-found">
-          <p>Not videos found.</p>
         </div>
-      )}
-    </div>
+        {data.length || !keyword || loading ? (
+          <React.Fragment>
+            <div className="category__movies-list">
+              {!loading
+                ? data.map((item, index) => (
+                    <div className="movie-cart-box" key={index}>
+                      <MovieCard item={item} category={category} />
+                    </div>
+                  ))
+                : null}
+              {loading
+                ? skeletonData.map((item, index) => (
+                    <div className="movie-cart-box" key={index}>
+                      <MovieCard item={item} category={category} loading={true} />
+                    </div>
+                  ))
+                : null}
+            </div>
+            <div className="category__load-more">
+              {!loading && totalItems !== page ? (
+                <ThemeProvider theme={buttonTheme}>
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    sx={{ fontWeight: 600, textTransform: "initial" }}
+                    onClick={onLoadMore}
+                  >
+                    Load more
+                  </Button>
+                </ThemeProvider>
+              ) : null}
+            </div>
+          </React.Fragment>
+        ) : (
+          <div className="not-found">
+            <p>Not videos found.</p>
+          </div>
+        )}
+      </div>
+    </React.Fragment>
   );
 };
 
