@@ -1,8 +1,10 @@
 @use "../../scss/" as *;
 
 .banner {
-  position: relative;
-  height: 50vh;
+  position: fixed;
+  height: 60vh;
+  width: 100%;
+  z-index: -1;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -41,7 +43,7 @@
 }
 
 .detail {
-  margin-top: -35vh;
+  margin-top: 7rem;
   @include flex(flex-start, flex-start);
   max-width: 1260px;
   position: relative;
@@ -108,6 +110,10 @@
     &__core,
     &__release {
       margin-top: 1rem;
+
+      & > span, .casts > span {
+        font-weight: 500;
+      }
     }
   }
 }
@@ -119,7 +125,7 @@
   margin-top: 50px;
 
   @include mobile {
-    margin-top: -35vh;
+    margin-top: 12vh;
     height: 30vh;
   }
 }

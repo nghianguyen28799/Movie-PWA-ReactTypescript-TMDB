@@ -94,7 +94,7 @@ const Header = () => {
             <IconButton
               size="large"
               aria-label="open drawer"
-              sx={{ color: colors.mainColor }}
+              sx={{ color: colors.mainColor, padding: 0 }}
               onClick={() => editOpenMenu(true)}
             >
               <MenuIcon sx={{ fontSize: 28 }} />

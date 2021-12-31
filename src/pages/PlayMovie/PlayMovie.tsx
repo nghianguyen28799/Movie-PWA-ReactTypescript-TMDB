@@ -1,11 +1,4 @@
-import {
-  Button,
-  Grid,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  ThemeProvider,
-} from "@mui/material";
+import { Button, Grid, MenuItem, Select, SelectChangeEvent, ThemeProvider } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
 import apiConfig from "../../api/apiConfig";
@@ -17,6 +10,8 @@ import ModalTrailer from "../../components/Modal/Modal";
 import MoviesList from "../../components/Movies-List/MoviesList";
 import "./PlayMovie.scss";
 import CloseIcon from "@mui/icons-material/Close";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "../../components/ErrorFallback/ErrorFallback";
 
 interface IEpisode {
   id: number;
@@ -54,7 +49,6 @@ const PlayMovie = () => {
 
   React.useEffect(() => {
     const getDetail = async () => {
-
       const response: any = await tmdbApi.detail({ category, id });
       setItem(response.data);
 
@@ -118,184 +112,195 @@ const PlayMovie = () => {
   };
 
   return (
-    <React.Fragment>
-      <title>Play Movie</title>
-      {!loading ? (
-        <div>
-          {item && (
-            <React.Fragment>
-              <div
-                className="banner"
-                style={{
-                  backgroundImage: `url(${apiConfig.originalImage(
-                    item.poster_path ?? item.backdrop_path
-                  )})`,
-                }}
-              ></div>
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={() => {
+        // reset the state of your app so the error doesn't happen again
+      }}
+    >
+      <React.Fragment>
+        <title>Play Movie</title>
 
-              <div className="content-wrap">
-                <div className="container detail mb-3">
-                  <div className="movie-poster">
-                    <div
-                      className="movie-poster__img"
-                      style={{
-                        backgroundImage: `url(${apiConfig.w500Image(
-                          item.poster_path ?? item.backdrop_path
-                        )})`,
-                      }}
-                    ></div>
-                  </div>
-                  <div className="movie-info">
-                    <div className="movie-info__title">
-                      <h1>{item.title ?? item.name}</h1>
+        {!loading ? (
+          <div>
+            {item && (
+              <React.Fragment>
+                <div
+                  className="banner"
+                  style={{
+                    backgroundImage: `url(${apiConfig.originalImage(
+                      item.poster_path ?? item.backdrop_path
+                    )})`,
+                  }}
+                ></div>
+
+                <div className="content-wrap">
+                  <div className="container detail mb-3">
+                    <div className="movie-poster">
+                      <div
+                        className="movie-poster__img"
+                        style={{
+                          backgroundImage: `url(${apiConfig.w500Image(
+                            item.poster_path ?? item.backdrop_path
+                          )})`,
+                        }}
+                      ></div>
                     </div>
+                    <div className="movie-info">
+                      <div className="movie-info__title">
+                        <h1>{item.title ?? item.name}</h1>
+                      </div>
 
-                    <div className="movie-info__genres">
-                      {item?.genres.map((item) => (
-                        <div className="genres-box" key={item.id}>
-                          <span>{item.name}</span>
+                      <div className="movie-info__genres">
+                        {item?.genres.map((item) => (
+                          <div className="genres-box" key={item.id}>
+                            <span>{item.name}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="movie-info__description">
+                        <p>{item.overview}</p>
+                      </div>
+
+                      <div className="movie-info__release">
+                        <h2>Release</h2>
+                        <span style={{ color: "#9e9e9e" }}>
+                          {category === "movie" ? item?.release_date : item?.first_air_date}
+                        </span>
+                      </div>
+
+                      <div className="movie-info__duration">
+                        <h2>Duration</h2>
+                        <span style={{ color: "#9e9e9e" }}>
+                          {category === "movie" ? item.runtime : item?.episode_run_time[0]}m
+                        </span>
+                      </div>
+
+                      <div className="movie-info__core">
+                        <h2>User Core</h2>
+                        <span style={{ color: "#9e9e9e" }}>{item.vote_average} / 10</span>
+                      </div>
+
+                      <div className="movie-info__casts">
+                        <h2>Casts</h2>
+                        <CreditsList id={id} category={category} />
+                      </div>
+
+                      <div className="movie-info__country">
+                        <h2>Country</h2>
+                        <span style={{ color: "#9e9e9e" }}>
+                          {item.production_countries[0]?.name ?? "undefined"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <React.Fragment>
+                    <div>
+                      <div className="container video-box mb-3">
+                        <iframe
+                          src={iframeSrc}
+                          allowFullScreen={true}
+                          width="100%"
+                          height="100%"
+                          title="trailer"
+                        ></iframe>
+                      </div>
+
+                      {category === "tv" ? (
+                        <div className="container selector mb-3">
+                          <Grid container>
+                            <Grid item xs={3}>
+                              <Select
+                                value={season}
+                                onChange={handleChangeSeason}
+                                fullWidth
+                                size="small"
+                              >
+                                {item.seasons.map((season) =>
+                                  season.season_number > 0 && season.air_date ? (
+                                    <MenuItem
+                                      key={season.id}
+                                      value={season.season_number.toString()}
+                                    >
+                                      {season.name}
+                                    </MenuItem>
+                                  ) : null
+                                )}
+                              </Select>
+                            </Grid>
+                            <Grid item xs={9}>
+                              <Select
+                                value={episode}
+                                MenuProps={MenuProps}
+                                onChange={handleChangeEpisode}
+                                fullWidth
+                                size="small"
+                              >
+                                {episodeData?.map((item) => (
+                                  <MenuItem key={item.id} value={item.episode_number.toString()}>
+                                    Episode {item.episode_number}: {item.name}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </Grid>
+                          </Grid>
                         </div>
-                      ))}
+                      ) : null}
                     </div>
-
-                    <div className="movie-info__description">
-                      <p>{item.overview}</p>
-                    </div>
-
-                    <div className="movie-info__release">
-                      <h2>Release</h2>
-                      <span>
-                        {category === "movie" ? item?.release_date : item?.first_air_date}
-                      </span>
-                    </div>
-
-                    <div className="movie-info__duration">
-                      <h2>Duration</h2>
-                      <span style={{ color: "#9e9e9e" }}>
-                        {category === "movie" ? item.runtime : item?.episode_run_time[0]}m
-                      </span>
-                    </div>
-
-                    <div className="movie-info__core">
-                      <h2>User Core</h2>
-                      <span style={{ color: "#9e9e9e" }}>{item.vote_average} / 10</span>
-                    </div>
-
-                    <div className="movie-info__casts">
-                      <h2>Casts</h2>
-                      <CreditsList id={id} category={category} />
-                    </div>
-
-                    <div className="movie-info__country">
-                      <h2>Country</h2>
-                      <span style={{ color: "#9e9e9e" }}>
-                        {item.production_countries[0]?.name ?? "undefined"}
-                      </span>
-                    </div>
-                  </div>
+                  </React.Fragment>
                 </div>
 
-                <React.Fragment>
-                  <div>
-                    <div className="container video-box mb-3">
-                      <iframe
-                        src={iframeSrc}
-                        allowFullScreen={true}
-                        width="100%"
-                        height="100%"
-                        title="trailer"
-                      ></iframe>
-                    </div>
+                <div className="container trailer mb-3">
+                  <h2 className="mb-2">Trailer(s)</h2>
+                  {trailers &&
+                    trailers.map((item: any, index: number) =>
+                      item.site === "YouTube" ? (
+                        <ThemeProvider theme={buttonTheme} key={index}>
+                          <Button
+                            variant="outlined"
+                            size="large"
+                            sx={{ fontWeight: 600, textTransform: "initial" }}
+                            onClick={() => handleOpen(item.key)}
+                          >
+                            Trailer {index + 1}
+                          </Button>
+                        </ThemeProvider>
+                      ) : null
+                    )}
+                </div>
+                <div className="container similar mb-3">
+                  <h2 className="mb-3">Similar</h2>
+                  <MoviesList category={category} id={Number(id)} type="similar" />
+                </div>
+              </React.Fragment>
+            )}
 
-                    {category === "tv" ? (
-                      <div className="container selector mb-3">
-                        <Grid container>
-                          <Grid item xs={3}>
-                            <Select
-                              value={season}
-                              onChange={handleChangeSeason}
-                              fullWidth
-                              size="small"
-                            >
-                              {item.seasons.map((season) =>
-                                season.season_number > 0 && season.air_date ? (
-                                  <MenuItem key={season.id} value={season.season_number.toString()}>
-                                    {season.name}
-                                  </MenuItem>
-                                ) : null
-                              )}
-                            </Select>
-                          </Grid>
-                          <Grid item xs={9}>
-                            <Select
-                              value={episode}
-                              MenuProps={MenuProps}
-                              onChange={handleChangeEpisode}
-                              fullWidth
-                              size="small"
-                            >
-                              {episodeData?.map((item) => (
-                                <MenuItem key={item.id} value={item.episode_number.toString()}>
-                                  Episode {item.episode_number}: {item.name}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          </Grid>
-                        </Grid>
-                      </div>
-                    ) : null}
-                  </div>
-                </React.Fragment>
-              </div>
+            {/* Modal Trailer */}
 
-              <div className="container trailer mb-3">
-                <h2 className="mb-2">Trailer(s)</h2>
-                {trailers &&
-                  trailers.map((item: any, index: number) =>
-                    item.site === "YouTube" ? (
-                      <ThemeProvider theme={buttonTheme} key={index}>
-                        <Button
-                          variant="outlined"
-                          size="large"
-                          sx={{ fontWeight: 600, textTransform: "initial" }}
-                          onClick={() => handleOpen(item.key)}
-                        >
-                          Trailer {index + 1}
-                        </Button>
-                      </ThemeProvider>
-                    ) : null
-                  )}
+            <ModalTrailer open={openTrailer}>
+              <div className="modal-box" id={`modal-box`}>
+                <div className="modal-close">
+                  <CloseIcon onClick={handleClose} />
+                </div>
+                <div className="modal-video">
+                  <iframe
+                    ref={iframeRef}
+                    allowFullScreen={true}
+                    width="100%"
+                    height="100%"
+                    title="trailer"
+                  ></iframe>
+                </div>
               </div>
-              <div className="container similar mb-3">
-                <h2 className="mb-3">Similar</h2>
-                <MoviesList category={category} id={Number(id)} type="similar" />
-              </div>
-            </React.Fragment>
-          )}
-
-          {/* Modal Trailer */}
-
-          <ModalTrailer open={openTrailer}>
-            <div className="modal-box" id={`modal-box`}>
-              <div className="modal-close">
-                <CloseIcon onClick={handleClose} />
-              </div>
-              <div className="modal-video">
-                <iframe
-                  ref={iframeRef}
-                  allowFullScreen={true}
-                  width="100%"
-                  height="100%"
-                  title="trailer"
-                ></iframe>
-              </div>
-            </div>
-          </ModalTrailer>
-        </div>
-      ) : (
-        <div style={{ height: 1000 }} />
-      )}
-    </React.Fragment>
+            </ModalTrailer>
+          </div>
+        ) : (
+          <div style={{ height: 1000 }} />
+        )}
+      </React.Fragment>
+    </ErrorBoundary>
   );
 };
 
