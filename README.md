@@ -2,7 +2,7 @@
 
 This project has been deloyed on [https://ngnmovie.netlify.app/]
 
-## The Language
+## The Languages
 
 React Typescrip
 
