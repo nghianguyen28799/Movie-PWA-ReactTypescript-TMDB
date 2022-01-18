@@ -1,0 +1,25 @@
+@use "../../scss/" as *;
+
+.scroll-button {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    z-index: -1;
+    opacity: 0;
+    transition: 0.5s ease opacity, 0.5s ease z-index;
+
+    @include tablet {
+        bottom: 30px;
+        right: 30px;
+    }
+    
+    @include mobile {
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+.scroll-display {
+    opacity: 1;
+    z-index: 10
+}

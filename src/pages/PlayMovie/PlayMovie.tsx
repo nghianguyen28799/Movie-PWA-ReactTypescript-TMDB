@@ -1,4 +1,4 @@
-import { Button, Grid, MenuItem, Select, SelectChangeEvent, ThemeProvider } from "@mui/material";
+import { Button, Grid, MenuItem, Select, SelectChangeEvent, ThemeProvider, Box } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
 import apiConfig from "../../api/apiConfig";
@@ -12,6 +12,7 @@ import "./PlayMovie.scss";
 import CloseIcon from "@mui/icons-material/Close";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "../../components/ErrorFallback/ErrorFallback";
+import { scrollToTop } from "../../common/ScrollToTop";
 
 interface IEpisode {
   id: number;
@@ -36,7 +37,13 @@ const PlayMovie = () => {
 
   const [loading, setLoading] = React.useState<boolean>(true);
   const [item, setItem] = React.useState<IVideo>();
-  const [episodeData, setEpisodeData] = React.useState<IEpisode[]>();
+  const [episodeData, setEpisodeData] = React.useState<IEpisode[]>([
+    {
+      id: 1,
+      episode_number: 1,
+      name: "",
+    },
+  ]);
   const [season, setSeason] = React.useState<string>("1");
   const [episode, setEpisode] = React.useState<string>("1");
   const [trailers, setTrailers] = React.useState<any>();
@@ -91,10 +98,6 @@ const PlayMovie = () => {
 
   const handleChangeEpisode = (event: SelectChangeEvent) => {
     setEpisode(event.target.value);
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleOpen = async (trailerKey: number) => {
@@ -210,7 +213,7 @@ const PlayMovie = () => {
 
                       {category === "tv" ? (
                         <div className="container selector mb-3">
-                          <Grid container>
+                          <Grid container sx={{ background: "#0f0f0f" }}>
                             <Grid item xs={3}>
                               <Select
                                 value={season}
@@ -254,21 +257,23 @@ const PlayMovie = () => {
 
                 <div className="container trailer mb-3">
                   <h2 className="mb-2">Trailer(s)</h2>
-                  {trailers &&
-                    trailers.map((item: any, index: number) =>
-                      item.site === "YouTube" ? (
-                        <ThemeProvider theme={buttonTheme} key={index}>
-                          <Button
-                            variant="outlined"
-                            size="large"
-                            sx={{ fontWeight: 600, textTransform: "initial" }}
-                            onClick={() => handleOpen(item.key)}
-                          >
-                            Trailer {index + 1}
-                          </Button>
-                        </ThemeProvider>
-                      ) : null
-                    )}
+                  <Box sx={{ background: "#0f0f0f", display: "inline-flex"}}>
+                    {trailers &&
+                      trailers.map((item: any, index: number) =>
+                        item.site === "YouTube" ? (
+                          <ThemeProvider theme={buttonTheme} key={index}>
+                            <Button
+                              variant="outlined"
+                              size="large"
+                              sx={{ fontWeight: 600, textTransform: "initial" }}
+                              onClick={() => handleOpen(item.key)}
+                            >
+                              Trailer {index + 1}
+                            </Button>
+                          </ThemeProvider>
+                        ) : null
+                      )}
+                  </Box>
                 </div>
                 <div className="container similar mb-3">
                   <h2 className="mb-3">Similar</h2>

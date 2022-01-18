@@ -6,7 +6,7 @@ import tmdbApi from "../../api/tmdbApi";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import { ThemeProvider } from "@mui/material/styles";
 import { buttonTheme } from "../../common/buttotTheme";
-import { Button, Grid, TextField } from "@mui/material";
+import { Box, Button, Grid, TextField } from "@mui/material";
 import { skeletonData } from "../../common/skeletonData";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
@@ -119,20 +119,22 @@ const Category = () => {
               xs={6}
               sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}
             >
-              <TextField
-                color="primary"
-                size="small"
-                name="search"
-                value={keyword}
-                onChange={handleOnChangeSearch}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
+              <Box component="form" autoComplete="off">
+                <TextField
+                  color="primary"
+                  size="small"
+                  name="search"
+                  value={keyword}
+                  onChange={handleOnChangeSearch}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <SearchIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Box>
             </Grid>
           </Grid>
         </div>

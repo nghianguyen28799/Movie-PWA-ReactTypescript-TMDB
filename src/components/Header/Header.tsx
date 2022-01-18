@@ -9,6 +9,7 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import DrawerComponent from "../Drawer/Drawer";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { scrollToTop } from "../../common/ScrollToTop";
 
 interface IRoutes {
   label: string;
@@ -61,10 +62,6 @@ const Header = () => {
     };
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   const editSearchStatus = () => {
     setSearching(!isSearching);
   };
@@ -102,7 +99,7 @@ const Header = () => {
           ) : null}
 
           <div className="header__logo">
-            <Link to="/home">
+            <Link to="/home" onClick={scrollToTop}>
               <h1 style={{ color: colors.mainColor }}>MovieNgN</h1>
             </Link>
           </div>
@@ -140,6 +137,7 @@ const Header = () => {
               {...register("search")}
               className="search--open__textfield"
               placeholder="Search here ..."
+              autoComplete="off"
             />
             <CloseOutlinedIcon
               color="inherit"

@@ -8,6 +8,7 @@ import Routes from "./config/Routes";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import ScrollButton from "./components/ScrollButton/ScrollButton";
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
           )}
         ></Route>
       </BrowserRouter>
+      <ScrollButton />
     </ThemeProvider>
   );
 }
