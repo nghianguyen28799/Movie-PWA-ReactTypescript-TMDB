@@ -42,6 +42,7 @@
     background-color: $black;
     opacity: 0;
     transition: 0.3s ease all;
+    z-index: 1,
   }
 
   &__title {
@@ -94,7 +95,7 @@
   .movie-card__image::before {
     opacity: 0.8;
   }
-  img {
+  .icon-view {
     width: 70px;
 
     @include mobile {

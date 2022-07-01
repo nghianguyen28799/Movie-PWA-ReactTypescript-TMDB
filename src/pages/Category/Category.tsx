@@ -1,7 +1,6 @@
 import React from "react";
 import "./Category.scss";
 import { useHistory, useParams } from "react-router-dom";
-import { IVideo } from "../../interfaces/Movies";
 import tmdbApi from "../../api/tmdbApi";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import { ThemeProvider } from "@mui/material/styles";
@@ -10,14 +9,21 @@ import { Box, Button, Grid, TextField } from "@mui/material";
 import { skeletonData } from "../../common/skeletonData";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { updateData } from "../../redux/modules/moviesSlice";
 
 function useDebounce<T>(initialValue: T, time: number): [T, T, React.Dispatch<T>] {
   const [value, setValue] = React.useState<T>(initialValue);
   const [debouncedValue, setDebouncedValue] = React.useState<T>(initialValue);
+
   React.useEffect(() => {
-    const debounce = setTimeout(() => {
-      setDebouncedValue(value);
-    }, time);
+    const debounce = setTimeout(
+      () => {
+        setDebouncedValue(value);
+      },
+      value ? time : 0
+    );
     return () => {
       clearTimeout(debounce);
     };
@@ -27,61 +33,106 @@ function useDebounce<T>(initialValue: T, time: number): [T, T, React.Dispatch<T>
 
 const Category = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  const buttonRef = React.useRef<any>(null);
+
   const params: { category: string } = useParams();
   const title = params.category === "movies" ? "Movies" : "TV Series";
   const category = params.category === "movies" ? "movie" : "tv";
 
-  const [data, setData] = React.useState<IVideo[]>([]);
-  const [page, setPage] = React.useState<number>(1);
-  const [debounceKeyword, keyword, setKeyword] = useDebounce<string>("", 1000);
+  const data = useSelector((state: RootState) => state.movies?.[category]?.data) ?? [];
+  const page = useSelector((state: RootState) => state.movies?.[category]?.page) ?? 1;
+  const keySearch = useSelector((state: RootState) => state.movies?.[category]?.keySearch) ?? "";
+
+  const [debounceKeyword, keyword, setKeyword] = useDebounce<string>("", 500);
   const [totalItems, setTotalItems] = React.useState<number>(0);
-  const [loading, setLoading] = React.useState<boolean>(true);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [allowReRender, setAllowReRender] = React.useState<boolean>(false);
 
-  const getInitData = async () => {
-    if (params.category !== "movies" && params.category !== "tv-series") {
-      history.push("/not-found");
+  const fetchKeySearch = React.useCallback(() => {
+    setKeyword(keySearch);
+    setAllowReRender(true);
+
+    if (page > 1) {
+      buttonRef?.current?.scrollIntoView();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category]);
+
+  React.useEffect(() => {
+    fetchKeySearch();
+  }, [fetchKeySearch]);
+
+  const getInitData = React.useCallback(async () => {
+    if (data?.length === 0) {
+      if (params.category !== "movies" && params.category !== "tv-series") {
+        history.push("/not-found");
+      }
+
+      setLoading(true);
+      let response = null;
+      switch (category) {
+        case "movie":
+          response = await tmdbApi.getMoviesList({ type: "upcoming", page: 1 });
+          break;
+        default:
+          response = await tmdbApi.getTvList({ type: "popular", page: 1 });
+      }
+      // setData(response.data.results);
+      dispatch(
+        updateData({
+          type: category,
+          data: {
+            keySearch: "",
+            page: 1,
+            data: response.data.results,
+          },
+        })
+      );
+      setTotalItems(response.data.total_pages);
+      setLoading(false);
+      // setKeyword("");
     }
 
-    setLoading(true);
-    setPage(1);
-    let response = null;
-    switch (category) {
-      case "movie":
-        response = await tmdbApi.getMoviesList({ type: "upcoming", page: 1 });
-        break;
-      default:
-        response = await tmdbApi.getTvList({ type: "popular", page: 1 });
-    }
-    setData(response.data.results);
-    setTotalItems(response.data.total_pages);
-    setLoading(false);
-    setKeyword("");
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category]);
 
   const getSearchData = async () => {
-    setPage(1);
+    // setPage(1);
     const response = await tmdbApi.search({ category, page: 1, query: debounceKeyword });
-    setData(response.data.results);
+    // setData(response.data.results);
+    dispatch(
+      updateData({
+        type: category,
+        data: {
+          keySearch: debounceKeyword,
+          page: 1,
+          data: response.data.results,
+        },
+      })
+    );
     setTotalItems(response.data.total_pages);
     setLoading(false);
   };
 
   React.useEffect(() => {
     getInitData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category]);
+  }, [getInitData]);
 
   React.useEffect(() => {
-    if (debounceKeyword) {
-      getSearchData();
-    } else if (loading === true) {
-      getInitData();
+    if (allowReRender) {
+      if (debounceKeyword) {
+        getSearchData();
+      } else if (loading === true) {
+        getInitData();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceKeyword]);
 
   const onLoadMore = async () => {
-    setPage(page + 1);
+    // setPage(page + 1);
     let response = null;
     if (!keyword) {
       switch (category) {
@@ -94,7 +145,16 @@ const Category = () => {
     } else {
       response = await tmdbApi.search({ category, page: page + 1, query: keyword });
     }
-    setData([...data, ...response.data.results]);
+    dispatch(
+      updateData({
+        type: category,
+        data: {
+          keySearch: debounceKeyword,
+          page: page + 1,
+          data: [...data, ...response.data.results],
+        },
+      })
+    );
   };
 
   const handleOnChangeSearch = (
@@ -138,11 +198,11 @@ const Category = () => {
             </Grid>
           </Grid>
         </div>
-        {data.length || !keyword || loading ? (
+        {data?.length || !keyword || loading ? (
           <React.Fragment>
             <div className="category__movies-list">
               {!loading
-                ? data.map((item, index) => (
+                ? data?.map((item, index) => (
                     <div className="movie-cart-box" key={index}>
                       <MovieCard item={item} category={category} />
                     </div>
@@ -164,6 +224,7 @@ const Category = () => {
                     size="large"
                     sx={{ fontWeight: 600, textTransform: "initial" }}
                     onClick={onLoadMore}
+                    ref={buttonRef}
                   >
                     Load more
                   </Button>

@@ -9,31 +9,33 @@ import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ScrollButton from "./components/ScrollButton/ScrollButton";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 function App() {
-
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
     },
   });
 
-
   return (
-    <ThemeProvider theme={darkTheme}>
-      <BrowserRouter>
-        <Route
-          render={(props: any) => (
-            <React.Fragment>
-              <Header />
-              <Routes />
-              <Footer />
-            </React.Fragment>
-          )}
-        ></Route>
-      </BrowserRouter>
-      <ScrollButton />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={darkTheme}>
+        <BrowserRouter>
+          <Route
+            render={(props: any) => (
+              <React.Fragment>
+                <Header />
+                <Routes />
+                <Footer />
+              </React.Fragment>
+            )}
+          ></Route>
+        </BrowserRouter>
+        <ScrollButton />
+      </ThemeProvider>
+    </Provider>
   );
 }
 

@@ -5,6 +5,7 @@ import apiConfig from "../../api/apiConfig";
 import { Link } from "react-router-dom";
 import PlayIcon from "../../assets/icons/play.png";
 import { Skeleton, useMediaQuery } from "@mui/material";
+import LazyImage from "../LazyImage/LazyImage";
 interface IMovieCard {
   item: IVideo | IVideoTemp;
   category: string;
@@ -50,8 +51,10 @@ const MovieCard = (props: IMovieCard) => {
       {!loading ? (
         <Link to={link}>
           <div className="movie-card">
-            <div className="movie-card__image" style={{ backgroundImage: `url(${bg})` }}></div>
-            <img src={PlayIcon} alt="" />
+            <div className="movie-card__image">
+              <LazyImage src={bg} alt={`movie-image`} />
+            </div>
+            <img src={PlayIcon} alt="" className="icon-view" />
             <div className="movie-card__release">
               <p>
                 {category === "movie"
