@@ -54,9 +54,16 @@ const Category = () => {
     setKeyword(keySearch);
     setAllowReRender(true);
 
-    if (page > 1) {
+    let prevLocation: any;
+
+    history.listen((nextLocation) => {
+      prevLocation = nextLocation;
+    });
+
+    if (prevLocation?.pathName?.includes("/playvideo") && page > 1) {
       buttonRef?.current?.scrollIntoView();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
 
