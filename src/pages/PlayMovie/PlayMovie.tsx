@@ -56,9 +56,9 @@ const PlayMovie = () => {
   const [openTrailer, setOpenTrailer] = React.useState<boolean>(false);
   const iframeRef = React.useRef<any>(null);
 
-  const iframeSrc = `https://www.2embed.ru/embed/tmdb/${category}?id=${id}${
-    category === `tv` && `&s=${season}&e=${episode}`
-  }`;
+  const iframeSrc = React.useMemo(() => {
+    return `https://www.2embed.org/embed/${id}${category === "tv" ? `/${season}/${episode}` : ""}`;
+  }, [category, id, season, episode]);
 
   React.useEffect(() => {
     const getDetail = async () => {
